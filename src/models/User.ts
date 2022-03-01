@@ -12,24 +12,34 @@ export type User = {
 
 export class UserData {
   async index(): Promise<User[]> {
-    const conn = await client.connect();
-    const sql = "SELECT * FROM users";
-    const result = await conn.query(sql);
-    conn.release();
-    return result.rows;
+    try{
+      const conn = await client.connect();
+      const sql = "SELECT * FROM users";
+      const result = await conn.query(sql);
+      conn.release();
+      return result.rows;
+    }catch(err){
+      throw new Error("cannot find data ...")
+    }
+    
   }
 
   async show(id: number): Promise<User> {
-    const conn = await client.connect();
-    const sql = "SELECT * FROM users WHERE id=($1) ";
-    const result = await conn.query(sql, [id]);
-    conn.release();
-
-    if (result.rowCount === 0) {
-      throw new Error("user not found");
+    try{
+      const conn = await client.connect();
+      const sql = "SELECT * FROM users WHERE id=($1) ";
+      const result = await conn.query(sql, [id]);
+      conn.release();
+  
+      if (result.rowCount === 0) {
+        throw new Error("cannot found user document");
+      }
+  
+      return result.rows[0];
+    }catch(err){
+      throw new Error("cannot found user document")
     }
 
-    return result.rows[0];
   }
 
   async create(u: User): Promise<User> {
@@ -101,6 +111,7 @@ export class UserData {
   }
 
   async login(email: string, password: string): Promise<string> {
+    try{
     const conn = await client.connect();
     const sql = "SELECT * FROM users WHERE email=($1)";
     const result = await conn.query(sql, [email]);
@@ -111,7 +122,6 @@ export class UserData {
     }
 
     const user = result.rows[0] as User;
-
     if (!bcrypt.compareSync(password, user.password)) {
       throw new Error("invalid email or password");
     }
@@ -123,5 +133,9 @@ export class UserData {
     );
 
     return token;
+    }catch(err){
+      throw new Error("invalid email or password")
+    }
+    
   }
 }

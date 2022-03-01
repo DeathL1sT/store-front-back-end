@@ -17,7 +17,7 @@ const users_route = (app: express.Application) => {
     login
   );
 
-  app.get("/user", index);
+  app.get("/user",auth, index);
 
   app.get(
     "/user/:id",
@@ -139,9 +139,14 @@ const deleted = async (req: Request, res: Response) => {
   }
 };
 
-const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response,next:NextFunction) => {
+try{
   const { email, password } = req.body;
   const token = await users.login(email, password);
   return res.status(200).json({ token });
+}catch(err){
+  next(err)
+}
+
 };
 export default users_route;
