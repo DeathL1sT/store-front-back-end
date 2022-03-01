@@ -34,6 +34,13 @@ describe("POST /login", () => {
   });
 });
 
+describe("GET /user", () => {
+  it("responds with user data on vaild id", async () => {
+    const res = await request.get("/user").set("x-auth-token", testToken);
+    expect(res.statusCode).toBe(200);
+  });
+});
+
 describe("GET /user/:id", () => {
   it("responds with user data on vaild id", async () => {
     const res = await request
