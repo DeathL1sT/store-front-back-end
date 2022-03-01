@@ -1,6 +1,37 @@
 # Store Front Back-End.
 
-## Installation
+A mini store backend made with Express.js, postgresSQL in shape of RESTful API
+
+## Setup
+
+You can choose to run this project with/out Docker. However, you might favor you would have to setup
+the .env file for configurations.
+
+## Setting up Database
+
+# create a user to connect to the database.
+
+CREATE USER storefront WITH PASSWORD "password";
+
+# Create Database storefrontend
+
+CREATE DATABASE storefrontend;
+GRANT ALL PRIVILEGES ON DATABASE storefrontend TO storefront;
+
+Do it agaein with the test database
+
+CREATE DATABASE storefrontend_test;
+GRANT ALL PRIVILEGES ON DATABASE storefrontend_test TO storefront;
+
+# Run database migrations
+
+npm run migrate
+
+or for test
+
+npm run migrate:test
+
+## To start the App you need to Installation
 
 Install deps:
 
